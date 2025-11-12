@@ -2,30 +2,19 @@ import React from "react";
 
 function LoginForm() {
     return (
-        <form 
-            style={{
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '15px',
-                padding: '30px',
-                border: '1px solid #ccc',
-                borderRadius: '8px',
-                backgroundColor: 'white',
-                boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
-                width: '250px'
-            }}
-        >
-            {/* username input */}
+        <form className="login-form">
             <input
+                type="text"
                 placeholder="Username"
-                name="username"/>
-            
-            {/* password input */}
+                name="username"
+                required
+            />
             <input
-                placeholder="password"
-                name="password"/>
-            
-            {/* login button */}
+                type="password"
+                placeholder="Password"
+                name="password"
+                required
+            />
             <button type="submit">Login</button>
         </form>
     );

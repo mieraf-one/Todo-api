@@ -1,0 +1,165 @@
+* {
+  box-sizing: border-box;
+  font-family: Inter, sans-serif;
+}
+
+body {
+  margin: 0;
+}
+
+.app {
+  display: flex;
+  height: 100vh;
+  background: #101922;
+  color: white;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 260px;
+  background: #111a22;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.logo-icon {
+  background: #137fec;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  display: grid;
+  place-items: center;
+}
+
+.nav-items {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  border-radius: 8px;
+  background: none;
+  border: none;
+  color: #92adc9;
+  cursor: pointer;
+}
+
+.nav-btn.active {
+  background: rgba(19, 127, 236, 0.2);
+  color: white;
+}
+
+.count {
+  margin-left: auto;
+  font-size: 12px;
+}
+
+.section-title {
+  margin-top: 20px;
+  font-size: 12px;
+  text-transform: uppercase;
+  opacity: 0.6;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.orange { background: orange; }
+.purple { background: purple; }
+.green { background: green; }
+
+/* Main */
+.main {
+  flex: 1;
+  padding: 32px;
+  overflow-y: auto;
+}
+
+.header h2 {
+  margin: 0;
+}
+
+.header p {
+  color: #92adc9;
+}
+
+.add-task input {
+  width: 100%;
+  padding: 14px;
+  border-radius: 12px;
+  border: none;
+  margin: 20px 0;
+}
+
+/* Tasks */
+.tasks h3 {
+  margin-top: 24px;
+}
+
+.overdue {
+  color: #ef4444;
+}
+
+.task {
+  display: flex;
+  gap: 12px;
+  background: #192633;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.active-task {
+  border-left: 4px solid #137fec;
+}
+
+.task-title {
+  font-weight: 500;
+}
+
+.task-content small {
+  color: #92adc9;
+}
+
+/* Details */
+.details {
+  width: 320px;
+  background: #111a22;
+  padding: 20px;
+  border-left: 1px solid #324d67;
+}
+
+.details textarea {
+  width: 100%;
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 18px;
+  resize: none;
+}
+
+.meta {
+  color: orange;
+  margin: 10px 0;
+}
+
+.description {
+  font-size: 14px;
+  color: #92adc9;
+}

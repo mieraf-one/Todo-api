@@ -1,5 +1,5 @@
 import { useState } from "react";
-import authPost from "../utils/authPost";
+import postReq from "../utils/postReq";
 
 function useUser() {
     const [firstName, setFirstName] = useState('');
@@ -18,22 +18,24 @@ function useUser() {
         setError(null);
         setSuccess(null);
 
-        authPost({
-                        firstName,
-                        lastName,
-                        username,
-                        email,
-                        password
-                    })
-                    .then((res) => {
-                        setSuccess("Successfully Registered.")
-                    })
-                    .catch((error) => {
-                        setError(Object.values(error.response.data).join(''))
-                    })
-                    .finally(() => {
-                        setLoading(false)
-                    })
+        postReq(
+            '/api/signup/',
+            {
+                firstName,
+                lastName,
+                username,
+                email,
+                password
+            })
+            .then((res) => {
+                setSuccess("Successfully Registered.")
+            })
+            .catch((error) => {
+                setError(Object.values(error.response.data).join(''))
+            })
+            .finally(() => {
+                setLoading(false)
+            })
     }
 
     return {

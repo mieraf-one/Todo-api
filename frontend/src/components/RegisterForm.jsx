@@ -1,4 +1,4 @@
-import useUser from "../hooks/useUser";
+import useUser from "../hooks/useSignup";
 
 function RegisterForm() {
     const { firstName, setFirstName, lastName, setLastName,

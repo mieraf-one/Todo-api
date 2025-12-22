@@ -1,6 +1,6 @@
-import '../pages/LoginPage.css'
 import '../App.css'
 import RegisterForm from '../components/RegisterForm'
+import './LoginPage.css'
 import { Link } from 'react-router-dom'
 
 
@@ -14,7 +14,7 @@ function RegisterPage() {
                 
                 <p>
                     Already have an account?{" "}
-                    <Link to="/login">Login</Link>
+                    {/* <Link to="/login">Login</Link> */}
                 </p>
             </div>
         </div>

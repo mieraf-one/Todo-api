@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import authService from "../utils/authService";
 
 function useLogin() {
@@ -7,6 +8,8 @@ function useLogin() {
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
     
+    const navigate = useNavigate();
+
     const onSubmit = async (e) => {
         e.preventDefault();
 
@@ -16,6 +19,7 @@ function useLogin() {
         try {
             const res = await authService.login({ username, password });
             // redirect
+            navigate('/dashboard');
 
         } catch (err) {
             setError(err.message);
@@ -25,7 +29,13 @@ function useLogin() {
     }
     
     return {
-        username, setUsername, password, setPassword, error, loading, onSubmit
+        username,
+        setUsername,
+        password,
+        setPassword,
+        error,
+        loading,
+        onSubmit
     }
 }
 

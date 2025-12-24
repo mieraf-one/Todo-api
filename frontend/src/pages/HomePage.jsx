@@ -1,111 +1,116 @@
+import authService from "../utils/authService";
+import { useNavigate } from "react-router-dom";
 import "./HomePage.css";
+import { useEffect, useState } from "react";
+import { getRequest, patchRequest, postRequest } from "../utils/reqWithAuth";
 
 function HomePage() {
+  const [todos, setTodos] = useState([]);
+
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const navigate = useNavigate();
+
+  const logout = () => {
+    authService.logout();
+    navigate('/login', {replace: true});
+  }
+
+  const addTodo = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+        await postRequest('/api/todos/', { title, content })
+        fetchTodos();
+    } catch (error) {
+      // pass for now
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  const isDone = async (e, id) => {
+    try {
+      const res = await patchRequest(`/api/todos/${id}/`, {"is_done": e.target.checked});
+      fetchTodos();
+
+    } catch (err) {
+      // pass for now
+    }
+  }
+
+  const fetchTodos = async () => {
+      try {
+        const res = await getRequest('/api/todos/');
+        console.log(res);
+        setTodos(res);
+
+    } catch (error) {
+      // pass for now
+    }
+  }
+
+  useEffect(() => {
+    fetchTodos();
+  }, [])
+
   return (
-    <div className="app dark">
-      {/* Sidebar */}
-      <nav className="sidebar">
-        <div className="logo">
-          <div className="logo-icon">✓</div>
-          <h1>TaskMaster</h1>
-        </div>
+    <div className="todo-app">
+      <h1 className="app-title">Todo</h1>
 
-        <div className="nav-items">
-          <button className="nav-btn">
-            <span>📥</span>
-            Inbox
-            <span className="count">4</span>
-          </button>
+      {/* Todo Form */}
+      <form className="todo-form" onSubmit={(e) => {addTodo(e)}}>
+        <input
+          type="text"
+          placeholder="Title"
+          className="todo-input"
+          value={title}
+          onChange={(e) => {setTitle(e.target.value)}}
+          required
+        />
 
-          <button className="nav-btn active">
-            <span>📅</span>
-            Today
-            <span className="count">12</span>
-          </button>
+        <textarea
+          placeholder="Content"
+          className="todo-textarea"
+          value={content}
+          onChange={(e) => {setContent(e.target.value)}}
+          required
+        />
 
-          <button className="nav-btn">
-            <span>🗓</span>
-            Upcoming
-          </button>
+        <button className="todo-btn" type="submit" disabled={loading}>
+          {loading ? "Adding Todo..." : "Add Todo"}
+        </button>
+      </form>
 
-          <p className="section-title">Projects</p>
+      {/* Todo List */}
+      <ul className="todo-list">
+        {todos.map((todo) => (
+            <li className="todo-item" key={todo.id} onClick={() => {navigate(`/detail/${todo.id}`)}}>
+              <input type="checkbox" checked={todo.is_done} onChange={(e) => {isDone(e, todo.id);}}/>
+              <div className="todo-text">
+                {todo.is_done ?
+                  <div>
+                    <h3><s>{todo.title}</s></h3>
+                    <p><s>{todo.content}</s></p>
+                  </div>
+                   : 
+                  <div>
+                    <h3>{todo.title}</h3>
+                    <p>{todo.content}</p>
+                  </div>
+                }
+              </div>
+            </li>
+        ))}
+      </ul>
 
-          <button className="nav-btn">
-            <span className="dot orange" />
-            Marketing Launch
-          </button>
-          <button className="nav-btn">
-            <span className="dot purple" />
-            Design System
-          </button>
-          <button className="nav-btn">
-            <span className="dot green" />
-            Personal
-          </button>
-        </div>
-      </nav>
-
-      {/* Main */}
-      <main className="main">
-        <header className="header">
-          <h2>Good morning, Alex</h2>
-          <p>It's Tuesday, October 24. You have 5 tasks pending.</p>
-        </header>
-
-        {/* Add task */}
-        <div className="add-task">
-          <input
-            type="text"
-            placeholder="Add a new task... e.g. Read book at 8pm"
-          />
-        </div>
-
-        {/* Tasks */}
-        <section className="tasks">
-          <h3 className="overdue">⚠ Overdue</h3>
-
-          <div className="task">
-            <input type="checkbox" />
-            <div className="task-content">
-              <span className="task-title">
-                Update client presentation with new metrics
-              </span>
-              <small>Yesterday • Work</small>
-            </div>
-          </div>
-
-          <h3>Today</h3>
-
-          <div className="task active-task">
-            <input type="checkbox" />
-            <div className="task-content">
-              <span className="task-title">
-                Submit quarterly report
-              </span>
-              <small>Today 2:00 PM • High Priority</small>
-            </div>
-          </div>
-
-          <div className="task">
-            <input type="checkbox" />
-            <div className="task-content">
-              <span className="task-title">Buy groceries for dinner</span>
-              <small>Today 6:00 PM • Personal</small>
-            </div>
-          </div>
-        </section>
-      </main>
-
-      {/* Details panel */}
-      <aside className="details">
-        <h3>Details</h3>
-        <textarea defaultValue="Submit quarterly report" />
-        <p className="meta">Today • High Priority</p>
-
-        <div className="description">
-          Compile the Q3 performance metrics from marketing and sales.
-        </div>
-      </aside>
+      {/* Logout Button */}
+      <button className="logout-btn" onClick={logout}>
+        Logout
+      </button>
     </div>
   );
 }

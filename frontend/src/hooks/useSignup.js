@@ -39,8 +39,20 @@ function useUser() {
     }
 
     return {
-        firstName, setFirstName, lastName, setLastName, username, setUsername, email, setEmail,
-        password, setPassword, success, loading, error, onSubmit
+        firstName,
+        setFirstName,
+        lastName,
+        setLastName,
+        username,
+        setUsername,
+        email,
+        setEmail,
+        password,
+        setPassword,
+        success,
+        loading,
+        error,
+        onSubmit
     }
 }
 

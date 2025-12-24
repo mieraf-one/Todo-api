@@ -19,7 +19,7 @@ function useLogin() {
         try {
             const res = await authService.login({ username, password });
             // redirect
-            navigate('/dashboard');
+            navigate('/dashboard', {replace: true})
 
         } catch (err) {
             setError(err.message);

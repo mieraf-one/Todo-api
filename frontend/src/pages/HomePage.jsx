@@ -43,7 +43,6 @@ function HomePage() {
   const fetchTodos = async () => {
       try {
         const res = await getRequest('/api/todos/');
-        console.log(res);
         setTodos(res);
 
     } catch (error) {

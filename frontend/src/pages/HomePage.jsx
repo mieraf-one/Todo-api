@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "./HomePage.css";
 import { useEffect, useState } from "react";
 import { getRequest, patchRequest, postRequest } from "../utils/reqWithAuth";
+import { useAuth } from "../hooks/useAuth";
 
 function HomePage() {
   const [todos, setTodos] = useState([]);
@@ -11,12 +12,9 @@ function HomePage() {
   const [content, setContent] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const navigate = useNavigate();
+  const { isAuthenticated, logout } = useAuth();
 
-  const logout = () => {
-    authService.logout();
-    navigate('/login', {replace: true});
-  }
+  const navigate = useNavigate();
 
   const addTodo = async (e) => {
     e.preventDefault();

@@ -14,7 +14,7 @@ function TodoDetail() {
         e.preventDefault();
         try {
             await patchRequest(`/api/todos/${id}/`, {title, content})
-            navigate('/dashboard');
+            navigate(-1);
 
         } catch (err) {
             // pass for now
@@ -24,7 +24,7 @@ function TodoDetail() {
     const deleteTodo = async () => {
         try {
             await deleteRequest(`/api/todos/${id}/`);
-            navigate('/dashboard');
+            navigate(-1);
         } catch (err) {
             // pass for now
         }

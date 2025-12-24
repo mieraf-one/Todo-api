@@ -1,10 +1,33 @@
+import { useAuth } from "../hooks/useAuth";
 import useLogin from "../hooks/useLogin";
+import { getAccessToken } from "../utils/services";
+import { useNavigate } from 'react-router-dom';
 
 function LoginForm() {
-    const { username, setUsername, password, setPassword, loading, error, onSubmit } = useLogin();
+    const { login } = useAuth();
+    const { username, setUsername, password, setPassword, loading, setLoading, error, setError, reset } = useLogin();
+    const navigate = useNavigate();
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        reset(); // reset loading and error.
+
+        try {
+            const tokens = await getAccessToken(username, password);
+
+            login(tokens.access, tokens.refresh);
+            navigate('/dashboard', { replace: true });
+
+        } catch (err) {
+            setError(err.message);
+        } finally {
+            setLoading(false);
+        }
+    }
 
     return (
-        <form className="login-form" onSubmit={(e) => onSubmit(e)}>
+        <form className="login-form" onSubmit={(e) => handleSubmit(e)}>
            
             <input
                 type="text"
@@ -26,7 +49,7 @@ function LoginForm() {
             
             {error && <p style={{color: 'red'}}>{error}</p>}
 
-            <button disabled={loading}>
+            <button disabled={loading} type="submit">
                    {loading ? "Logging in" : "Log in"}
             </button>
 

@@ -16,7 +16,7 @@ function App() {
       <Route path='/login' element={<LoginPage />} />
       <Route path='/dashboard' element={ <ProtectedRoute children={ <HomePage /> }/>} />
       <Route path='/' element={ <Navigate to={'/dashboard'} /> } />
-      <Route path='/detail/:id' element={ <TodoDetail /> } />
+      <Route path='/detail/:id' element={ <ProtectedRoute children={<TodoDetail /> } />} />
 
     </Routes>
   )

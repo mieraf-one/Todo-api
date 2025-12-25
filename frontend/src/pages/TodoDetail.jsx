@@ -21,6 +21,16 @@ function TodoDetail() {
         }
     }
 
+    const isDone = async (id) => {
+        try {
+        const res = await patchRequest(`/api/todos/${id}/`, {"is_done": true});
+        fetchTodos();
+
+        } catch (err) {
+        // pass for now
+        }
+    }
+
     const deleteTodo = async () => {
         try {
             await deleteRequest(`/api/todos/${id}/`);
@@ -46,49 +56,117 @@ function TodoDetail() {
     }, [])
 
     return (
-        <div className="todo-detail">
+    <div className="todo-detail-container">
+      {/* Background Gradient */}
+      <div className="detail-background"></div>
+      
+      {/* Main Card */}
+      <div className="detail-card">
+        {/* Header with Navigation */}
+        <header className="detail-header">
+          <button 
+            className="back-nav-btn"
+            onClick={() => { navigate(-1); }}
+          >
+            <span className="back-icon">←</span>
+            <span className="back-text">Back</span>
+          </button>
+          
+          <div className="header-title-section">
+            <h1 className="detail-main-title">Task Details</h1>
+          </div>
+          
+          <div className="header-actions">
+            
+          </div>
+        </header>
 
-            {/* Back Icon */}
-            <div className="back-btn" onClick={() => {navigate(-1);}}>
-                ←
+        {/* Edit Form */}
+        <form 
+          className="detail-form"
+          onSubmit={(e) => { 
+            update(e); 
+          }}
+        >
+          <div className="form-section">
+            <div className="section-header">
+              <label className="detail-label">
+                Task Title
+                <span className="required-asterisk">*</span>
+              </label>
+              <div className="char-counter">
+                <span className="current-chars">0</span>
+                <span className="max-chars">/ 100</span>
+              </div>
             </div>
+            
+            <input
+              type="text"
+              className="detail-input"
+              placeholder="What needs to be done?"
+              value={title}
+              onChange={(e) => { setTitle(e.target.value) }}
+              required
+            />
+          </div>
 
-            <h1 className="detail-title">Todo Detail</h1>
-
-            {/* Edit Form */}
-            <form className="detail-form" onSubmit={(e) => {update(e);}}>
-                <label className="detail-label">Title</label>
-                <input
-                type="text"
-                className="detail-input"
-                placeholder="Todo title"
-                value={title}
-                onChange={(e) => {setTitle(e.target.value)}}
-                required
-                />
-
-                <label className="detail-label">Content</label>
-                <textarea
-                className="detail-textarea"
-                placeholder="Todo content"
-                value={content}
-                onChange={(e) => {setContent(e.target.value)}}
-                required
-                />
-
-                <div className="detail-actions">
-                <button className="update-btn" type="submit">
-                    Update
-                </button>
-
-                <button className="delete-btn" type="button" onClick={deleteTodo}>
-                    Delete
-                </button>
-                </div>
-            </form>
+          <div className="form-section">
+            <div className="section-header">
+              <label className="detail-label">
+                Description
+                <span className="required-asterisk">*</span>
+              </label>
+              <div className="char-counter">
+                <span className="current-chars">{content.length}</span>
+                <span className="max-chars">/ 500</span>
+              </div>
             </div>
+            
+            <textarea
+              className="detail-textarea"
+              placeholder="Add detailed description, notes, or instructions..."
+              rows="5"
+              value={content}
+              onChange={(e) => { setContent(e.target.value); }}
+              required
+            />
+          </div>
 
-    );
+          {/* Action Buttons */}
+          <div className="detail-actions">
+            <button 
+              className="update-btn primary"
+              type="submit"
+              onClick={() => console.log('Update clicked')}
+            >
+              <span className="btn-icon">💾</span>
+              Save Changes
+            </button>
+            
+            <div className="secondary-actions">
+              <button 
+                className="update-btn secondary"
+                type="button"
+                onClick={() => {isDone(id); navigate(-1);}}
+              >
+                <span className="btn-icon">✅</span>
+                Mark Complete
+              </button>
+              
+              <button 
+                className="delete-btn"
+                type="button"
+                onClick={deleteTodo}
+              >
+                <span className="btn-icon">🗑️</span>
+                Delete Task
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
 }
 
 export default TodoDetail;

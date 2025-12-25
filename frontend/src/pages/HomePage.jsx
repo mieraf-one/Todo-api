@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import "./HomePage.css";
 import { useEffect, useState } from "react";
-import { getRequest, patchRequest, postRequest } from "../utils/reqWithAuth";
+import { getRequest, patchRequest, postRequest, deleteRequest } from "../utils/reqWithAuth";
 import { useAuth } from "../hooks/useAuth";
 
 function HomePage() {
@@ -30,6 +30,15 @@ function HomePage() {
       setContent('');
     }
   }
+
+  const deleteTodo = async (id) => {
+          try {
+              await deleteRequest(`/api/todos/${id}/`);
+              navigate(-1);
+          } catch (err) {
+              // pass for now
+          }
+      }
 
   const isDone = async (e, id) => {
     try {
@@ -182,7 +191,7 @@ function HomePage() {
                       </button>
                       <button 
                         className="action-btn delete"
-                        onClick={(e) => {e.stopPropagation(); console.log('Delete todo 1')}}
+                        onClick={(e) => {e.stopPropagation(); deleteTodo(todo.id)}}
                       >
                         🗑️
                       </button>

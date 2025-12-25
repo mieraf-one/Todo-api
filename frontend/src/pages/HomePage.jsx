@@ -20,10 +20,14 @@ function HomePage() {
     setLoading(true);
 
     try {
-        await postRequest('/api/todos/', { title, content })
+        await postRequest('/api/todos/', { title, content });
         fetchTodos();
     } catch (error) {
-      // pass for now
+
+      if (error.message === '401') {
+        navigate('/login');
+      }
+      
     } finally {
       setLoading(false);
       setTitle('');
@@ -36,7 +40,9 @@ function HomePage() {
               await deleteRequest(`/api/todos/${id}/`);
               navigate(-1);
           } catch (err) {
-              // pass for now
+              if (err.message === '401') {
+                navigate('/login');
+      }
           }
       }
 
@@ -56,7 +62,9 @@ function HomePage() {
         setTodos(res);
 
     } catch (error) {
-      // pass for now
+      if (error.message === '401') {
+        navigate('/login');
+      }
     }
   }
 
@@ -260,7 +268,6 @@ function HomePage() {
                 <button 
                   className="todo-btn primary"
                   type="submit"
-                  onClick={() => console.log('Add todo clicked')}
                 >
                   <span className="btn-icon">➕</span>
                   Add Task
@@ -269,7 +276,7 @@ function HomePage() {
                 <button 
                   className="todo-btn secondary"
                   type="button"
-                  onClick={() => console.log('Clear form clicked')}
+                  onClick={() => {setTitle(''); setContent('');}}
                 >
                   Clear All
                 </button>

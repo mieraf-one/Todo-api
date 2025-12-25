@@ -1,9 +1,7 @@
 import axios from "axios";
 import BASE_URL from "./const";
-import { useNavigate } from "react-router-dom";
 
 export async function postRequest(path, data) {
-    const navigate = useNavigate();
 
     try {
         const access = localStorage.getItem('access');
@@ -24,7 +22,9 @@ export async function postRequest(path, data) {
             throw new Error('failed adding todos.');
         }
 
-        if (err.response.status == 401) return navigate('/login');
+         if (err.response.status == 401) {
+            throw new Error('401')
+        }
 
         throw new Error(Object.values(err.response.data).join(' '));
     }
@@ -49,7 +49,9 @@ export async function getRequest(path) {
             throw new Error('failed getting todos.');
         }
 
-        if (err.response.status == 401) return navigate('/login');
+        if (err.response.status == 401) {
+            throw new Error('401')
+        }
 
         throw new Error(Object.values(err.response.data).join(' '));
     }
@@ -75,7 +77,9 @@ export async function patchRequest(path, data) {
             throw new Error('failed updating todos.');
         }
 
-        if (err.response.status == 401) return navigate('/login');
+         if (err.response.status == 401) {
+            throw new Error('401')
+        }
 
         throw new Error(Object.values(err.response.data).join(' '));
     }
@@ -100,7 +104,9 @@ export async function deleteRequest(path) {
             throw new Error('failed deleting todos.');
         }
 
-        if (err.response.status == 401) return navigate('/login');
+        if (err.response.status == 401) {
+            throw new Error('401')
+        }
 
         throw new Error(Object.values(err.response.data).join(' '));
     }

@@ -3,6 +3,7 @@ import "./HomePage.css";
 import { useEffect, useState } from "react";
 import { getRequest, patchRequest, postRequest, deleteRequest } from "../utils/reqWithAuth";
 import { useAuth } from "../hooks/useAuth";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 function HomePage() {
   const [todos, setTodos] = useState([]);
@@ -37,27 +38,34 @@ function HomePage() {
 
   const deleteTodo = async (id) => {
           try {
+              setLoading(true);
               await deleteRequest(`/api/todos/${id}/`);
               navigate(-1);
           } catch (err) {
               if (err.message === '401') {
                 navigate('/login');
-      }
+              }
+          } finally {
+            setLoading(false);
           }
       }
 
   const isDone = async (e, id) => {
     try {
+      setLoading(true);
       const res = await patchRequest(`/api/todos/${id}/`, {"is_done": e.target.checked});
       fetchTodos();
 
     } catch (err) {
       // pass for now
+    } finally {
+      setLoading(false);
     }
   }
 
   const fetchTodos = async () => {
       try {
+        setLoading(true);
         const res = await getRequest('/api/todos/');
         setTodos(res);
 
@@ -65,6 +73,8 @@ function HomePage() {
       if (error.message === '401') {
         navigate('/login');
       }
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -163,7 +173,7 @@ function HomePage() {
             </div>
 
             <div className="todos-list">
-              {todos.map((todo) =>  (
+              {loading ? <LoadingSpinner text="loading..." /> : <>{todos.map((todo) =>  (
                 
              <div 
                 className="todo-item active"
@@ -208,7 +218,7 @@ function HomePage() {
                     {todo.is_done ? <s className="todo-description">{todo.content}</s> : <p style={{display: "inline"}} className="todo-description">{todo.content}</p>}
                 </div>
               </div>
-              ))}
+              ))}</>}
 
               {/* Empty State */}
               <div className="empty-state" style={{display: 'none'}}>
@@ -266,11 +276,11 @@ function HomePage() {
 
               <div className="form-actions">
                 <button 
-                  className="todo-btn primary"
+                  className="todo-btn primary add-todo-btn"
                   type="submit"
+                  disabled={loading}
                 >
-                  <span className="btn-icon">➕</span>
-                  Add Task
+                  {loading ? <span>Adding Todo...</span> : <span>➕ Add Task</span>}
                 </button>
                 
                 <button 

@@ -712,3 +712,14 @@
     flex-direction: column;
   }
 }
+
+
+.add-todo-btn:disabled {
+    background: #9bb9ff;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.add-todo-btn:disabled:hover {
+    background: #9bb9ff;
+}

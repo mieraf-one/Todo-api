@@ -2,10 +2,12 @@ import { useEffect, useState } from "react";
 import "./TodoDetail.css";
 import { deleteRequest, getRequest, patchRequest } from "../utils/reqWithAuth";
 import { useNavigate, useParams } from "react-router-dom";
+import LoadingSpinner from '../components/LoadingSpinner'
 
 function TodoDetail() {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
+    const [loading, setLoading] = useState(false);
 
     const navigate = useNavigate();
     const { id } = useParams();
@@ -13,21 +15,26 @@ function TodoDetail() {
     const update = async (e) => {
         e.preventDefault();
         try {
+            setLoading(true);
             await patchRequest(`/api/todos/${id}/`, {title, content})
-            navigate(-1);
 
         } catch (err) {
             // pass for now
+        } finally {
+          setLoading(false);
         }
     }
 
     const isDone = async (id) => {
         try {
-        const res = await patchRequest(`/api/todos/${id}/`, {"is_done": true});
-        fetchTodos();
+          setLoading(true);
+          const res = await patchRequest(`/api/todos/${id}/`, {"is_done": true});
+          fetchTodos();
 
         } catch (err) {
         // pass for now
+        } finally {
+          setLoading(false);
         }
     }
 
@@ -42,12 +49,15 @@ function TodoDetail() {
 
     const getTodo = async () => {
         try {
+            setLoading(true);
             const res = await getRequest(`/api/todos/${id}/`);
             setTitle(res.title);
             setContent(res.content);
 
         } catch (error) {
             // pass for now
+        } finally {
+            setLoading(false);
         }
     }
 
@@ -81,14 +91,15 @@ function TodoDetail() {
           </div>
         </header>
 
-        {/* Edit Form */}
         <form 
           className="detail-form"
           onSubmit={(e) => { 
             update(e); 
           }}
         >
-          <div className="form-section">
+           {loading ? <LoadingSpinner text="Loading..."/> :
+           <> 
+           <div className="form-section">
             <div className="section-header">
               <label className="detail-label">
                 Task Title
@@ -130,7 +141,9 @@ function TodoDetail() {
               onChange={(e) => { setContent(e.target.value); }}
               required
             />
-          </div>
+          </div></>
+           }
+          
 
           {/* Action Buttons */}
           <div className="detail-actions">

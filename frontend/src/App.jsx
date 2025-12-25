@@ -14,9 +14,9 @@ function App() {
 
       <Route path='/signup' element={<RegisterPage />} />
       <Route path='/login' element={<LoginPage />} />
-      <Route path='/dashboard' element={ <ProtectedRoute children={ <HomePage /> }/>} />
+      <Route path='/dashboard' element={ <ProtectedRoute> <HomePage /> </ProtectedRoute>} />
       <Route path='/' element={ <Navigate to={'/dashboard'} /> } />
-      <Route path='/detail/:id' element={ <ProtectedRoute children={<TodoDetail /> } />} />
+      <Route path='/detail/:id' element={ <ProtectedRoute> <TodoDetail /> </ProtectedRoute>} />
 
     </Routes>
   )
